@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #div {
+            height: 600px;
+            width: 900px;
+        }
+        #div1 {
+            float: left;
+            height: 600px;
+            width: 400px;
+            border: solid 1px;
+        }
+        #div2 {
+            float: right;
+            height: 600px;
+            width: 400px;
+            border: solid 1px;
+        }
+    </style>
+</head>
+<body>
+<div id="div">
+    <div id="div1">
+        <P id="powerDiv1" style="margin-left: 5px"></P>
+        <p id="onOffDiv1" style="margin-left: 5px"></p>
+        <h2 id="h2Div1" style="text-align: center"></h2>
+        <input type="text" id="textDiv1" style="height: 50px; width: 360px;
+                    margin-left: 15px; background-color: black">
+        <button type="button" onclick="turnon()">Turnon</button>
+        <button type="button" onclick="turnoff()">Turnoff</button>
+        <button type="button" onclick="saveMessage()">Save</button>
+        <button type="button" onclick="charge()">Charge</button>
+        <button type="button" onclick="sentMessage()">Send message</button>
+    </div>
+    <div id="div2">
+        <P id="powerDiv2" style="margin-left: 5px"></P>
+        <h2 id="h2Div2" style="text-align: center"></h2>
+        <input type="text" id="text1Div2" style="height: 50px; width: 360px; margin-left: 15px"><br>
+        <button type="button" onclick="openMessage()">Open Message</button>
+        <p id="pDiv2" style="margin-left: 15px"><span id="spanDiv2"></span></p>
+    </div>
+</div>
+<script>
+    class Mobie {
+        constructor(power, name) {
+            this.sent = [];
+            this.inbox = []
+            this.draft = []
+            this.power = power;
+            this.name = name;
+        }
+        status(){
+            if (this.status = 1){
+                return false;
+            } else {
+                return true;
+            }
+        }
+        onthePhone(){
+            this.power--
+            this.status = 1
+            return "The phone is On"
+        }
+        offthePhone(){
+            this.power--
+            this.status = 0;
+            return " "
+        }
+        displayPower() {
+            return "Power: " + this.power
+        }
+        displayName() {
+            return this.name
+        }
+        charging() {
+            if (this.power < 100) {
+                this.power++
+            } else if (this.power == 100) {
+                alert("The power already full")
+            }
+        }
+        save(message) {
+            this.draft.push(message);
+            this.power--
+        }
+        send(message, mobile) {
+            this.sent.push(message);
+            this.power--
+            mobile.inbox.push(message);
+        }
+        open(){
+            return this.inbox;
+        }
+    }
+    let nokia = new Mobie(100, "Nokia")
+    let iphone = new Mobie(100, "Iphone")
+    // Hiển thị tên và pin nokia
+    document.getElementById("h2Div1").innerHTML = nokia.displayName();
+    document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+    // Hiển thị tên và pin iphone
+    document.getElementById("h2Div2").innerHTML = iphone.displayName();
+    document.getElementById("powerDiv2").innerHTML = iphone.displayPower();
+    // Bật điện thoại
+    function turnon(){
+        document.getElementById("onOffDiv1").innerHTML = nokia.onthePhone()
+        document.getElementById("textDiv1").disabled = false
+        document.getElementById("textDiv1").style.backgroundColor = "white"
+        document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+    }
+    // Tắt điện thoại
+    function turnoff(){
+        document.getElementById("onOffDiv1").innerHTML = nokia.offthePhone()
+        document.getElementById("textDiv1").disabled = true
+        document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+    }
+    // Sạc pin
+    function charge() {
+        nokia.charging()
+        document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+    }
+    // Soạn thảo văn bản
+    function saveMessage() {
+        nokia.save(document.getElementById("textDiv1").value);
+        if (nokia.draft == 0) {
+            alert("There is nothing to save")
+            document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+        } else {
+            alert(nokia.draft + " saved in memory")
+            document.getElementById("powerDiv1").innerHTML = nokia.displayPower();
+        }
+    }
+    // Gửi tin nhắn
+    function sentMessage() {
+        nokia.send(document.getElementById("textDiv1").value, iphone);
+        document.getElementById("pDiv2").innerHTML = "U have a message"
+    }
+    // Mở tin nhắn
+    function openMessage(){
+        document.getElementById("pDiv2").innerHTML = "Message: " + iphone.open();
+    }
+</script>
+</body>
+</html>
